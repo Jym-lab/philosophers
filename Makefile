@@ -6,7 +6,7 @@ NAME = philo
 
 INCLUDE = -I./include
 SRCS_DIR = ./srcs
-SRCS_FILES = main.c
+SRCS_FILES = main.c argv_init.c
 SRCS = $(addprefix $(addsuffix /, $(SRCS_DIR)), $(SRCS_FILES))
 OBJS = $(SRCS:.c=.o)
 

@@ -1,43 +1,43 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yjoo <yjoo@student.42seoul.kr>             +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/07/20 14:25:58 by yjoo              #+#    #+#             */
+/*   Updated: 2022/07/20 16:01:58 by yjoo             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/philo.h"
 
-void *t_function(void *param)
+void	err_msg(char *msg)
 {
-    for (int i = 1; i <= 5; i++)
-    {
-        usleep(1000 * 1000 * 2); //2초 대기
-        printf("%s: ", (char *)param);
-        printf("쓰레드 함수 실행 중..%d/5\n",i);
-    }
-        printf("쓰레드 함수 종료\n");
-        return (void *)2147483647;
+	printf("%s\n", msg);
+	exit(EXIT_FAILURE);
 }
 
-int main()
+int	main(int ac, char *av[])
 {
-    pthread_t p_thread1;
-    pthread_t p_thread2;
-    int thr_id1;
-    int thr_id2;
+	t_manager	manager;
+	t_philo		*philos;
+	t_fork		*fork;
 
-    thr_id1 = pthread_create(&p_thread1, NULL, t_function, "thread1");
-    thr_id2 = pthread_create(&p_thread2, NULL, t_function, "thread2");
-    if (thr_id1 < 0 || thr_id2 < 0)
-    {
-        perror("thread create error : ");
-        exit(0);
-    }
-//    pthread_detach(p_thread1);
-//    pthread_detach(p_thread2);
-    //  pthread_join(p_thread1, 0);
-  //  pthread_join(p_thread2, 0);
-
-    int s = 0;
-/*    while (42)
-    {
-        printf("%d초 경과\n", s++);
-        usleep(1000 * 1000);
-    }*/
-    system("leaks philo");
-    printf("main() 종료\n");
-    return 0;
-    }
+	if (ac > 4)
+	{
+		argv_init(ac, av, &manager);
+		philos = malloc(manager.number_of_philosophers * sizeof(t_philo));
+		fork = malloc(manager.number_of_philosophers * sizeof(t_fork));
+		if (!philos || !fork)
+			err_msg("malloc error");
+		memset(philos, 0, manager.number_of_philosophers * sizeof(t_philo));
+		memset(philos, 0, manager.number_of_philosophers * sizeof(t_fork));
+		free(philos);
+		free(fork);
+	}
+	else
+		err_msg("Usage: ./philo [number_of_philosopher] [time_to_die] [time_to_eat] \
+[time_to_sleep] ([number_of_times_each_philosopher_must_eat])");
+	return (0);
+}
